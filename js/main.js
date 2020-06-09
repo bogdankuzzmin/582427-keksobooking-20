@@ -20,11 +20,14 @@ var Y_MAX = 630;
 var PRICE_MIN = 10000;
 var PRICE_MAX = 50000;
 
+var MAP_PIN_WIDTH = 50;
+var MAP_PIN_HEIGHT = 70;
+
 var getRandomElement = function (arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 };
 
-var getRandomNumber = function (min, max) {
+var getRandomInteger = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
@@ -32,7 +35,7 @@ var getRandomArr = function (arr) {
   var randomArr = [];
 
   arr.forEach(function (element) {
-    if (getRandomNumber(0, 1) === 1) {
+    if (getRandomInteger(0, 1) === 1) {
       randomArr.push(element);
     }
   });
@@ -40,68 +43,60 @@ var getRandomArr = function (arr) {
   return randomArr;
 };
 
-var mapPins = document.querySelector('.map__pins');
-var mapPinsWidth = mapPins.offsetWidth;
-
-var getAdvertisement = function (index) {
-  var locationX = getRandomNumber(0, mapPinsWidth);
-  var locationY = getRandomNumber(Y_MIN, Y_MAX);
-  var advertisement = {
-    author: {
-      avatar: 'img/avatars/user0' + (index + 1) + '.png'
-    },
-    offer: {
-      title: 'строка, заголовок предложения',
-      adress: locationX + ', ' + locationY,
-      price: getRandomNumber(PRICE_MIN, PRICE_MAX),
-      type: getRandomElement(TYPE),
-      rooms: getRandomElement(ROOMS),
-      guests: getRandomElement(GUESTS),
-      checkin: getRandomElement(CHECKIN),
-      checkout: getRandomElement(CHECKOUT),
-      features: getRandomArr(FEATURES),
-      description: 'строка с описанием',
-      photos: getRandomArr(PHOTOS),
-    },
-    location: {
-      x: locationX,
-      y: locationY
-    }
-  };
-
-  return advertisement;
-};
-
 var getAdvertisements = function () {
   var advertisementsArr = [];
 
   for (var i = 0; i < PIN_NUMBERS; i++) {
-    advertisementsArr.push(getAdvertisement(i));
+    var locationX = getRandomInteger(0 + (MAP_PIN_WIDTH / 2), mapPinsWidth - (MAP_PIN_WIDTH / 2));
+    var locationY = getRandomInteger(Y_MIN, Y_MAX);
+
+    var advertisement = {
+      author: {
+        avatar: 'img/avatars/user0' + (i + 1) + '.png'
+      },
+
+      offer: {
+        title: 'строка, заголовок предложения',
+        adress: locationX + ', ' + locationY,
+        price: getRandomInteger(PRICE_MIN, PRICE_MAX),
+        type: getRandomElement(TYPE),
+        rooms: getRandomElement(ROOMS),
+        guests: getRandomElement(GUESTS),
+        checkin: getRandomElement(CHECKIN),
+        checkout: getRandomElement(CHECKOUT),
+        features: getRandomArr(FEATURES),
+        description: 'строка с описанием',
+        photos: getRandomArr(PHOTOS),
+      },
+
+      location: {
+        x: locationX,
+        y: locationY
+      }
+    };
+
+    advertisementsArr.push(advertisement);
   }
 
   return advertisementsArr;
 };
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+var renderPins = function () {
+  var renderPin = function (adv) {
+    var pinElement = pinTemplate.cloneNode(true);
+    var pin = pinElement.querySelector('.map__pin');
+    var pinAvatar = pinElement.querySelector('img');
 
-var pinTemplate = document.getElementById('pin').content;
+    pin.style.left = adv.location.x + 'px';
+    pin.style.marginLeft = (-MAP_PIN_WIDTH / 2) + 'px';
+    pin.style.top = adv.location.y + 'px';
+    pin.style.marginTop = -MAP_PIN_HEIGHT + 'px';
+    pinAvatar.src = adv.author.avatar;
+    pinAvatar.alt = adv.offer.title;
 
-var renderPin = function (adv) {
-  var pinElement = pinTemplate.cloneNode(true);
-  var pin = pinElement.querySelector('.map__pin');
-  var pinAvatar = pinElement.querySelector('img');
+    return pinElement;
+  };
 
-  pin.style.left = adv.location.x + 'px';
-  pin.style.top = adv.location.y + 'px';
-  pinAvatar.src = adv.author.avatar;
-  pinAvatar.alt = adv.offer.title;
-
-  return pinElement;
-};
-
-
-var addPins = function () {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < advertisementsArr.length; i++) {
@@ -111,5 +106,14 @@ var addPins = function () {
   mapPins.appendChild(fragment);
 };
 
+var pinTemplate = document.getElementById('pin').content;
+
+var mapPins = document.querySelector('.map__pins');
+var mapPinsWidth = mapPins.offsetWidth;
+
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
+
 var advertisementsArr = getAdvertisements();
-addPins();
+
+renderPins();
