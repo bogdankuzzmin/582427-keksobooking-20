@@ -3,12 +3,12 @@
 var PIN_NUMBERS = 8;
 
 var TYPE = ['palace', 'flat', 'house', 'bungalo'];
-/* var TYPE_TO_RU = {
+var TYPE_TO_RU = {
   palace: 'Дворец',
   flat: 'Квартира',
   house: 'Дом',
   bungalo: 'Бунгало'
-}; */
+};
 var ROOMS = ['1', '2', '3', '100'];
 var GUESTS = ['1', '2', '3'];
 var CHECKIN = ['12:00', '13:00', '14:00'];
@@ -99,7 +99,7 @@ var getAdvertisements = function () {
 };
 
 var renderPins = function () {
-  var renderPin = function (adv) {
+  var renderPin = function (adv, index) {
     var pinTemplate = document.getElementById('pin').content;
     var pinElement = pinTemplate.cloneNode(true);
     var pin = pinElement.querySelector('.map__pin');
@@ -111,6 +111,7 @@ var renderPins = function () {
     pin.style.marginTop = -MAP_PIN_HEIGHT + 'px';
     pinAvatar.src = adv.author.avatar;
     pinAvatar.alt = adv.offer.title;
+    pin.dataset.advId = index;
 
     return pinElement;
   };
@@ -118,13 +119,13 @@ var renderPins = function () {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < advertisementsArr.length; i++) {
-    fragment.appendChild(renderPin(advertisementsArr[i]));
+    fragment.appendChild(renderPin(advertisementsArr[i], i));
   }
 
   mapPins.appendChild(fragment);
 };
 
-/* var addCard = function () {
+var addCard = function (mapPinId) {
   var cardTemplate = document.getElementById('card').content;
   var mapFilters = document.querySelector('.map__filters-container');
 
@@ -192,10 +193,10 @@ var renderPins = function () {
   };
 
   var fragment = document.createDocumentFragment();
-
-  fragment.appendChild(renderCard(advertisementsArr[5]));
+  fragment.appendChild(renderCard(advertisementsArr[mapPinId]));
   mapFilters.before(fragment);
-}; */
+
+};
 
 var toggleElements = function (elements, value) {
   for (var i = 0; i < elements.length; i++) {
@@ -218,18 +219,13 @@ var setPageActive = function () {
   toggleElements(adFormFieldsets, false);
   renderPins();
   setValueAddressInput(MAP_PIN_MAIN_HEIGHT + MAP_PIN_MAIN_POINTER_HEIGHT);
-  mapPinMain.removeEventListener('mousedown', mapPinMainMouseDownHandler);
-  mapPinMain.removeEventListener('keydown', mapPinMainKeyDownHandler);
+  mapPinMain.removeEventListener('mousedown', mapPinMainActiveHandler);
+  mapPinMain.removeEventListener('keydown', mapPinMainActiveHandler);
+  mapPins.addEventListener('click', mapCardOpenHandler);
 };
 
-var mapPinMainMouseDownHandler = function (evt) {
-  if (evt.button === 0) {
-    setPageActive();
-  }
-};
-
-var mapPinMainKeyDownHandler = function (evt) {
-  if (evt.key === 'Enter') {
+var mapPinMainActiveHandler = function (evt) {
+  if (evt.button === 0 || evt.key === 'Enter') {
     setPageActive();
   }
 };
@@ -289,9 +285,40 @@ var inputGuestsRoomsChangeHandler = function () {
   }
 };
 
+var mapCardOpenHandler = function (evt) {
+  var mapPin = evt.target.closest('.map__pin:not(.map__pin--main)');
+  var mapCard = document.querySelector('.map__card');
+
+  if (mapPin) {
+    if (mapCard) {
+      document.querySelector('.map__card').remove();
+    }
+
+    var mapPinId = mapPin.dataset.advId;
+    addCard(mapPinId);
+    var mapCardClose = document.querySelector('.popup__close');
+
+    mapCardClose.addEventListener('click', mapCardCloseHandler);
+    document.addEventListener('keydown', mapCardCloseHandler);
+  }
+};
+
+var mapCardCloseHandler = function (evt) {
+  var mapCard = document.querySelector('.map__card');
+
+  if (evt.target.matches('.popup__close')) {
+
+    mapCard.remove();
+  } else if (evt.key === 'Escape') {
+
+    mapCard.remove();
+  }
+  document.removeEventListener('keydown', mapCardCloseHandler);
+};
+
 var init = function () {
-  mapPinMain.addEventListener('mousedown', mapPinMainMouseDownHandler);
-  mapPinMain.addEventListener('keydown', mapPinMainKeyDownHandler);
+  mapPinMain.addEventListener('mousedown', mapPinMainActiveHandler);
+  mapPinMain.addEventListener('keydown', mapPinMainActiveHandler);
   inputTitle.addEventListener('invalid', function () {
     inputInvalidHandler(inputTitle);
   });
@@ -326,6 +353,3 @@ toggleElements(adFormFieldsets, true);
 inputGuestsRoomsChangeHandler();
 setValueAddressInput(MAP_PIN_MAIN_HEIGHT / 2);
 init();
-// addCard();
-
-
