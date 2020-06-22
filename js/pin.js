@@ -30,5 +30,5 @@
     mapPins.appendChild(fragment);
   };
 
-  window.renderPins = renderPins;
+  window.pin.renderPins = renderPins;
 })();

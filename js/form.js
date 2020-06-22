@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var inputInvalidHandler = function (element) {
     if (element.validity.valueMissing) {
       element.setCustomValidity('Обязательное поле');
@@ -72,6 +71,8 @@
     inputRoomNumber.addEventListener('input', inputGuestsRoomsChangeHandler);
   };
 
+  var adForm = document.querySelector('.ad-form');
+  var adFormFieldsets = adForm.querySelectorAll('fieldset');
   var inputTitle = document.querySelector('#title');
   var inputPrice = document.querySelector('#price');
   var inputType = document.querySelector('#type');
@@ -82,4 +83,11 @@
 
   init();
   inputGuestsRoomsChangeHandler();
+  window.main.toggleElements(adFormFieldsets, true);
+
+  window.form = {
+    adForm: adForm,
+    adFormFieldsets: adFormFieldsets
+  };
+
 })();
