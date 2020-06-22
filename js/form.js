@@ -33,8 +33,8 @@
   };
 
   var inputTypeChangeHandler = function () {
-    inputPrice.setAttribute('min', window.PRICES_FOR_TYPES[inputType.value]);
-    inputPrice.setAttribute('placeholder', window.PRICES_FOR_TYPES[inputType.value]);
+    inputPrice.setAttribute('min', window.main.PRICES_FOR_TYPES[inputType.value]);
+    inputPrice.setAttribute('placeholder', window.main.PRICES_FOR_TYPES[inputType.value]);
   };
 
   var inputTimeInOutChangeHandler = function () {

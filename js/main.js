@@ -26,7 +26,7 @@ var Y_MAX = 630;
 var PRICE_MIN = 0;
 var PRICE_MAX = 1000000;
 
-window.PRICES_FOR_TYPES = {
+var PRICES_FOR_TYPES = {
   bungalo: 0,
   flat: 1000,
   house: 5000,
@@ -57,33 +57,6 @@ var getRandomArr = function (arr) {
   });
 
   return randomArr;
-};
-
-var renderPins = function () {
-  var renderPin = function (adv, index) {
-    var pinTemplate = document.getElementById('pin').content;
-    var pinElement = pinTemplate.cloneNode(true);
-    var pin = pinElement.querySelector('.map__pin');
-    var pinAvatar = pinElement.querySelector('img');
-
-    pin.style.left = adv.location.x + 'px';
-    pin.style.marginLeft = (-MAP_PIN_WIDTH / 2) + 'px';
-    pin.style.top = adv.location.y + 'px';
-    pin.style.marginTop = -MAP_PIN_HEIGHT + 'px';
-    pinAvatar.src = adv.author.avatar;
-    pinAvatar.alt = adv.offer.title;
-    pin.dataset.advId = index;
-
-    return pinElement;
-  };
-
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < advertisementsArr.length; i++) {
-    fragment.appendChild(renderPin(advertisementsArr[i], i));
-  }
-
-  mapPins.appendChild(fragment);
 };
 
 var addCard = function (mapPinId) {
@@ -178,7 +151,7 @@ var setPageActive = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   toggleElements(adFormFieldsets, false);
-  renderPins();
+  window.renderPins();
   setValueAddressInput(MAP_PIN_MAIN_HEIGHT + MAP_PIN_MAIN_POINTER_HEIGHT);
   mapPinMain.removeEventListener('mousedown', mapPinMainActiveHandler);
   mapPinMain.removeEventListener('keydown', mapPinMainActiveHandler);
@@ -251,6 +224,12 @@ window.main = {
   Y_MAX: Y_MAX,
   PRICE_MIN: PRICE_MIN,
   PRICE_MAX: PRICE_MAX,
+  PRICES_FOR_TYPES: PRICES_FOR_TYPES,
+  MAP_PIN_WIDTH: MAP_PIN_WIDTH,
+  MAP_PIN_HEIGHT: MAP_PIN_HEIGHT,
+  MAP_PIN_MAIN_WIDTH: MAP_PIN_MAIN_WIDTH,
+  MAP_PIN_MAIN_HEIGHT: MAP_PIN_MAIN_HEIGHT,
+  MAP_PIN_MAIN_POINTER_HEIGHT: MAP_PIN_MAIN_POINTER_HEIGHT,
   getRandomElement: getRandomElement,
   getRandomArr: getRandomArr,
   getRandomInteger: getRandomInteger
