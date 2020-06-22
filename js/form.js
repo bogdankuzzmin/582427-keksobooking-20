@@ -46,9 +46,9 @@
   };
 
   var inputGuestsRoomsChangeHandler = function () {
-    if (inputGuestNumber.value === '0' && inputRoomNumber.value !== window.ROOMS[3]) {
+    if (inputGuestNumber.value === '0' && inputRoomNumber.value !== window.main.ROOMS[3]) {
       inputGuestNumber.setCustomValidity('Для ' + '"' + inputGuestNumber.options[3].label + '"' + ' допустимое значение: ' + '"' + inputRoomNumber.options[3].label + '"');
-    } else if (inputRoomNumber.value === window.ROOMS[3] && inputGuestNumber.value !== '0') {
+    } else if (inputRoomNumber.value === window.main.ROOMS[3] && inputGuestNumber.value !== '0') {
       inputGuestNumber.setCustomValidity('Для ' + '"' + inputRoomNumber.options[3].label + '"' + ' допустимое значение: ' + '"' + inputGuestNumber.options[3].label + '"');
     } else if (inputGuestNumber.value > inputRoomNumber.value) {
       inputGuestNumber.setCustomValidity('Количество гостей не должно привышать количество комнат');

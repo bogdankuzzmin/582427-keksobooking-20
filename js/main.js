@@ -3,13 +3,13 @@
 var PIN_NUMBERS = 8;
 
 var TYPE = ['palace', 'flat', 'house', 'bungalo'];
-window.TYPE_TO_RU = {
+var TYPE_TO_RU = {
   palace: 'Дворец',
   flat: 'Квартира',
   house: 'Дом',
   bungalo: 'Бунгало'
 };
-window.ROOMS = ['1', '2', '3', '100'];
+var ROOMS = ['1', '2', '3', '100'];
 var GUESTS = ['1', '2', '3'];
 var CHECKIN = ['12:00', '13:00', '14:00'];
 var CHECKOUT = ['12:00', '13:00', '14:00'];
@@ -57,45 +57,6 @@ var getRandomArr = function (arr) {
   });
 
   return randomArr;
-};
-
-var getAdvertisements = function () {
-  var mapPinsWidth = mapPins.offsetWidth;
-  var advertisementsArr = [];
-
-  for (var i = 0; i < PIN_NUMBERS; i++) {
-    var locationX = getRandomInteger(0 + (MAP_PIN_WIDTH / 2), mapPinsWidth - (MAP_PIN_WIDTH / 2));
-    var locationY = getRandomInteger(Y_MIN, Y_MAX);
-
-    var advertisement = {
-      author: {
-        avatar: 'img/avatars/user0' + (i + 1) + '.png'
-      },
-
-      offer: {
-        title: 'строка, заголовок предложения',
-        adress: locationX + ', ' + locationY,
-        price: getRandomInteger(PRICE_MIN, PRICE_MAX),
-        type: getRandomElement(TYPE),
-        rooms: getRandomElement(window.ROOMS),
-        guests: getRandomElement(GUESTS),
-        checkin: getRandomElement(CHECKIN),
-        checkout: getRandomElement(CHECKOUT),
-        features: getRandomArr(FEATURES),
-        description: 'строка с описанием',
-        photos: getRandomArr(PHOTOS),
-      },
-
-      location: {
-        x: locationX,
-        y: locationY
-      }
-    };
-
-    advertisementsArr.push(advertisement);
-  }
-
-  return advertisementsArr;
 };
 
 var renderPins = function () {
@@ -181,7 +142,7 @@ var addCard = function (mapPinId) {
     cardTitle.textContent = adv.offer.title;
     cardAdress.textContent = adv.offer.adress;
     cardPrice.textContent = adv.offer.price + '₽/ночь';
-    cardType.textContent = window.TYPE_TO_RU[adv.offer.type];
+    cardType.textContent = TYPE_TO_RU[adv.offer.type];
     cardRoomAndGuests.textContent = adv.offer.rooms + ' комнаты для ' + adv.offer.guests + ' гостей';
     cardCheckinAndCheckout.textContent = 'Заезд после ' + adv.offer.checkin + ', выезд до ' + adv.offer.checkout;
     cardFeatures.appendChild(renderCardFeatures(adv.offer.features, cardFeatures));
@@ -272,8 +233,25 @@ var mapPins = document.querySelector('.map__pins');
 var adForm = document.querySelector('.ad-form');
 var adFormFieldsets = adForm.querySelectorAll('fieldset');
 
-var advertisementsArr = getAdvertisements();
-
 toggleElements(adFormFieldsets, true);
 setValueAddressInput(MAP_PIN_MAIN_HEIGHT / 2);
 init();
+
+window.main = {
+  PIN_NUMBERS: PIN_NUMBERS,
+  TYPE: TYPE,
+  TYPE_TO_RU: TYPE_TO_RU,
+  ROOMS: ROOMS,
+  GUESTS: GUESTS,
+  CHECKIN: CHECKIN,
+  CHECKOUT: CHECKOUT,
+  FEATURES: FEATURES,
+  PHOTOS: PHOTOS,
+  Y_MIN: Y_MIN,
+  Y_MAX: Y_MAX,
+  PRICE_MIN: PRICE_MIN,
+  PRICE_MAX: PRICE_MAX,
+  getRandomElement: getRandomElement,
+  getRandomArr: getRandomArr,
+  getRandomInteger: getRandomInteger
+};
