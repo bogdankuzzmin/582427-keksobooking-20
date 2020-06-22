@@ -60,7 +60,7 @@
     MAP_PIN_HEIGHT: 70,
     MAP_PIN_MAIN_WIDTH: 65,
     MAP_PIN_MAIN_HEIGHT: 65,
-    MAP_PIN_MAIN_POINTER_HEIGHT: 22,
+    MAP_PIN_MAIN_POINTER_HEIGHT: 16,
     getRandomElement: getRandomElement,
     getRandomArr: getRandomArr,
     getRandomInteger: getRandomInteger,
