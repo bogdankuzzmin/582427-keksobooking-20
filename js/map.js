@@ -2,25 +2,24 @@
 
 (function () {
   var mapPinMain = document.querySelector('.map__pin--main');
+  var map = document.querySelector('.map');
 
   var setPageActive = function () {
     var mapPins = document.querySelector('.map__pins');
-    var map = document.querySelector('.map');
 
     map.classList.remove('map--faded');
     window.form.adForm.classList.remove('ad-form--disabled');
     window.main.toggleElements(window.form.adFormFieldsets, false);
     window.pin.renderPins();
-    setValueAddressInput(window.main.MAP_PIN_MAIN_HEIGHT + window.main.MAP_PIN_MAIN_POINTER_HEIGHT);
     mapPinMain.removeEventListener('mousedown', mapPinMainActiveHandler);
     mapPinMain.removeEventListener('keydown', mapPinMainActiveHandler);
     mapPins.addEventListener('click', mapCardOpenHandler);
   };
 
-  var setValueAddressInput = function (valueY) {
+  var setValueAddressInput = function (valueX, valueY) {
     var addressInput = document.querySelector('#address');
-    var positionX = Math.floor(mapPinMain.offsetLeft + (window.main.MAP_PIN_MAIN_WIDTH / 2));
-    var positionY = Math.floor(mapPinMain.offsetTop + valueY);
+    var positionX = Math.floor(valueX);
+    var positionY = Math.floor(valueY);
 
     addressInput.value = positionX + ', ' + positionY;
     addressInput.readOnly = true;
@@ -64,5 +63,10 @@
   mapPinMain.addEventListener('mousedown', mapPinMainActiveHandler);
   mapPinMain.addEventListener('keydown', mapPinMainActiveHandler);
 
-  setValueAddressInput(window.main.MAP_PIN_MAIN_HEIGHT / 2);
+  window.map = {
+    map: map,
+    setValueAddressInput: setValueAddressInput
+  };
+
+  setValueAddressInput(mapPinMain.offsetLeft + (window.main.MAP_PIN_MAIN_WIDTH / 2), (mapPinMain.offsetTop + window.main.MAP_PIN_MAIN_HEIGHT / 2));
 })();
