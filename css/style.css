@@ -1201,6 +1201,7 @@ fieldset {
 
 .error__button {
   padding: 10px;
+  margin-right: 15px;
 
   font-size: 22px;
   font-weight: 700;
