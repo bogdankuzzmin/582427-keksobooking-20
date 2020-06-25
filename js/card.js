@@ -69,7 +69,7 @@
     };
 
     var fragment = document.createDocumentFragment();
-    fragment.appendChild(renderCard(window.advertisementsArr[mapPinId]));
+    fragment.appendChild(renderCard(window.data[mapPinId]));
     mapFilters.before(fragment);
 
   };
