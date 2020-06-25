@@ -23,8 +23,8 @@
 
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < window.advertisementsArr.length; i++) {
-      fragment.appendChild(renderPin(window.advertisementsArr[i], i));
+    for (var i = 0; i < window.data.length; i++) {
+      fragment.appendChild(renderPin(window.data[i], i));
     }
 
     mapPins.appendChild(fragment);
