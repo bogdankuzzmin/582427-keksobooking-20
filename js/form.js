@@ -56,6 +56,46 @@
     }
   };
 
+  var toggleInputsSelects = function (value) {
+    window.main.toggleElement(adFormFieldsets, value);
+    window.main.toggleElement(mapFilters, value);
+    window.main.toggleElement(mapFeatures, value);
+  };
+
+  var submitHandler = function (evt) {
+    window.backend.save(new FormData(adForm), window.backend.successHandler, window.backend.errorHandler);
+
+    evt.preventDefault();
+  };
+
+  var cleanForm = function () {
+    inputTitle.value = '';
+    inputType.value = 'flat';
+    inputPrice.value = '';
+    inputPrice.setAttribute('placeholder', '1000');
+    inputRoomNumber.value = '1';
+    inputGuestNumber.value = '3';
+    inputDescription.value = '';
+    inputTimeIn.value = '12:00';
+    inputTimeOut.value = '12:00';
+    inputCheckboxes.forEach(function (element) {
+      element.checked = false;
+    });
+
+    window.filter.selectType.value = 'any';
+    window.filter.selectPrice.value = 'any';
+    window.filter.selectRooms.value = 'any';
+    window.filter.selectGuests.value = 'any';
+    window.filter.mapCheckboxes.forEach(function (element) {
+      element.checked = false;
+    });
+  };
+
+  var resetHandler = function (evt) {
+    evt.preventDefault();
+    window.map.setPageInactive();
+  };
+
   var init = function () {
     inputTitle.addEventListener('invalid', function () {
       inputInvalidHandler(inputTitle);
@@ -69,10 +109,14 @@
     inputTimeOut.addEventListener('input', inputTimeInOutChangeHandler);
     inputGuestNumber.addEventListener('input', inputGuestsRoomsChangeHandler);
     inputRoomNumber.addEventListener('input', inputGuestsRoomsChangeHandler);
+    adForm.addEventListener('submit', submitHandler);
+    adForm.addEventListener('reset', resetHandler);
   };
 
   var adForm = document.querySelector('.ad-form');
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
+  var mapFilters = document.querySelectorAll('.map__filter');
+  var mapFeatures = document.querySelectorAll('.map__features');
   var inputTitle = document.querySelector('#title');
   var inputPrice = document.querySelector('#price');
   var inputType = document.querySelector('#type');
@@ -80,14 +124,19 @@
   var inputTimeOut = document.querySelector('#timeout');
   var inputRoomNumber = document.querySelector('#room_number');
   var inputGuestNumber = document.querySelector('#capacity');
+  var inputDescription = document.querySelector('#description');
+  var inputCheckboxes = document.querySelectorAll('.feature__checkbox');
 
   init();
   inputGuestsRoomsChangeHandler();
-  window.main.toggleElements(adFormFieldsets, true);
+  toggleInputsSelects(true);
 
   window.form = {
     adForm: adForm,
-    adFormFieldsets: adFormFieldsets
+    adFormFieldsets: adFormFieldsets,
+    mapFilters: mapFilters,
+    mapFeatures: mapFeatures,
+    toggleInputsSelects: toggleInputsSelects,
+    cleanForm: cleanForm
   };
-
 })();
