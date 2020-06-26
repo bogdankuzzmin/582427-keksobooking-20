@@ -2,6 +2,7 @@
 
 (function () {
   var URL_LOAD = 'https://javascript.pages.academy/keksobooking/data';
+  var URL_SAVE = 'https://javascript.pages.academy/keksobooking';
   var TIMEOUT_IN_MS = 10000;
 
   var load = function (loadHandler, errorHandler) {
@@ -22,6 +23,9 @@
           break;
         case 404:
           error = 'Ничего не найдено — 404';
+          break;
+        case 500:
+          error = 'Ошибка на стороне сервера';
           break;
 
         default:
@@ -47,50 +51,126 @@
     xhr.send();
   };
 
-  var errorHandler = function (message) {
-    var errorTemplate = document.querySelector('#error').content;
-    var errorElement = errorTemplate.cloneNode(true);
-    var errorMessage = errorElement.querySelector('.error__message');
-    var errorButtonClose = errorElement.querySelector('.error__button--close');
-    var errorButtonRefresh = errorElement.querySelector('.error__button--refresh');
+  var save = function (data, successHandler, errorHandler) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
 
-    errorMessage.textContent = message;
+    xhr.addEventListener('load', function () {
+      var error;
+      switch (xhr.status) {
+        case 200:
+          successHandler(xhr.response);
+          break;
+        case 400:
+          error = 'Неверный запрос';
+          break;
+        case 401:
+          error = 'Пользователь не авторизован';
+          break;
+        case 404:
+          error = 'Ничего не найдено — 404';
+          break;
+        case 500:
+          error = 'Ошибка на стороне сервера';
+          break;
 
-    document.body.appendChild(errorElement);
-
-    var errorDiv = document.querySelector('.error');
-
-    var errorButtonClickHandler = function (evt) {
-      if (evt.target.matches('.error__button--refresh')) {
-        location.reload();
+        default:
+          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
       }
-      errorDiv.remove();
 
+      if (error) {
+        errorHandler(error);
+      }
+    });
+
+    xhr.addEventListener('error', function () {
+      errorHandler('Произошла ошибка соединения');
+    });
+
+    xhr.addEventListener('timeout', function () {
+      errorHandler('Запрос не успел выполнится за ' + xhr.timeout + 'мс');
+    });
+
+    xhr.timeout = TIMEOUT_IN_MS;
+
+    xhr.open('POST', URL_SAVE);
+    xhr.send(data);
+  };
+
+  var getElementFromTemplate = function (tagName, message) {
+    var mainDOM = document.querySelector('main');
+    var getTemplate = document.querySelector('#' + tagName).content;
+    var getElement = getTemplate.cloneNode(true);
+    var getBtn = getElement.querySelector('.' + tagName + '__button');
+    var getMessage = getElement.querySelector('.' + tagName + '__message');
+
+    if (getMessage.matches('.error__message')) {
+      getMessage.textContent = message;
+    }
+
+    mainDOM.appendChild(getElement);
+
+    var messageDiv = document.querySelector('.' + tagName);
+
+    var getBtnClickHandler = function () {
+      messageDiv.remove();
+
+      document.removeEventListener('click', popupClickHandler);
       document.removeEventListener('keydown', popupEscPressHandler);
     };
 
-    var popupEscPressHandler = function (evt) {
-      if (evt.key === 'Escape') {
-        errorDiv.remove();
+    var popupClickHandler = function (evt) {
+      if (evt.target.matches('.' + tagName)) {
+        messageDiv.remove();
 
+        if (tagName === 'success') {
+          window.map.setPageInactive();
+        }
+
+        document.removeEventListener('click', popupClickHandler);
         document.removeEventListener('keydown', popupEscPressHandler);
       }
     };
 
-    errorButtonClose.addEventListener('click', errorButtonClickHandler);
-    errorButtonRefresh.addEventListener('click', errorButtonClickHandler);
+    var popupEscPressHandler = function (evt) {
+      if (evt.key === 'Escape') {
+        messageDiv.remove();
+
+        if (tagName === 'success') {
+          window.map.setPageInactive();
+        }
+
+        document.removeEventListener('click', popupClickHandler);
+        document.removeEventListener('keydown', popupEscPressHandler);
+      }
+    };
+
+    document.addEventListener('click', popupClickHandler);
     document.addEventListener('keydown', popupEscPressHandler);
+    if (getBtn) {
+      getBtn.addEventListener('click', getBtnClickHandler);
+    }
   };
 
-  var successHandler = function (loadData) {
+  var successHandler = function () {
+    getElementFromTemplate('success');
+  };
+
+  var errorHandler = function (message) {
+    getElementFromTemplate('error', message);
+  };
+
+  var saveDataHandler = function (loadData) {
     window.data = loadData;
   };
 
   window.backend = {
-    load: load,
-    successHandler: successHandler
+    successHandler: successHandler,
+    errorHandler: errorHandler,
+    save: save,
+    load: load
   };
 
-  load(successHandler, errorHandler);
+  load(saveDataHandler, errorHandler);
 })();
 
