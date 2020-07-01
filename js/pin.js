@@ -1,7 +1,9 @@
 'use strict';
 
 (function () {
-  var renderPins = function () {
+  var renderPins = function (dataPins) {
+    var MAX_PINS = 5;
+
     var mapPins = document.querySelector('.map__pins');
 
     var renderPin = function (adv, index) {
@@ -22,13 +24,26 @@
     };
 
     var fragment = document.createDocumentFragment();
+    var takeNumber = dataPins.length > MAX_PINS ? MAX_PINS : dataPins.length;
 
-    for (var i = 0; i < window.data.length; i++) {
-      fragment.appendChild(renderPin(window.data[i], i));
+    deletePins();
+
+    for (var i = 0; i < takeNumber; i++) {
+      fragment.appendChild(renderPin(dataPins[i], i));
     }
 
     mapPins.appendChild(fragment);
   };
 
-  window.pin.renderPins = renderPins;
+  var deletePins = function () {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    pins.forEach(function (pin) {
+      pin.remove();
+    });
+  };
+
+  window.pin = {
+    renderPins: renderPins,
+    deletePins: deletePins
+  };
 })();
