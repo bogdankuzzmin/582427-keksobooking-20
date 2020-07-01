@@ -22,7 +22,7 @@
           error = 'Пользователь не авторизован';
           break;
         case 404:
-          error = 'Ничего не найдено — 404';
+          error = '404 — Ничего не найдено';
           break;
         case 500:
           error = 'Ошибка на стороне сервера';
@@ -31,6 +31,11 @@
         default:
           error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
       }
+
+      window.backend.load = {
+        statusLoad: xhr.status,
+        statusTextLoad: xhr.statusText
+      };
 
       if (error) {
         errorHandler(error);
@@ -162,6 +167,7 @@
 
   var saveDataHandler = function (loadData) {
     window.data = loadData;
+    window.filter.currentData = loadData;
   };
 
   window.backend = {

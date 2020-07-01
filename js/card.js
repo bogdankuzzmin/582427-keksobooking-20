@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var addCard = function (mapPinId) {
+  var addCard = function (mapPinId, currentData) {
     var cardTemplate = document.getElementById('card').content;
     var mapFilters = document.querySelector('.map__filters-container');
 
@@ -69,10 +69,19 @@
     };
 
     var fragment = document.createDocumentFragment();
-    fragment.appendChild(renderCard(window.data[mapPinId]));
+    fragment.appendChild(renderCard(currentData[mapPinId]));
     mapFilters.before(fragment);
-
   };
 
-  window.addCard = addCard;
+  var deleteCard = function () {
+    var card = document.querySelector('.map__card');
+    if (card) {
+      card.remove();
+    }
+  };
+
+  window.card = {
+    addCard: addCard,
+    deleteCard: deleteCard
+  };
 })();

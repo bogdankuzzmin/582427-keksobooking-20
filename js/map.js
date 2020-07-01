@@ -6,15 +6,20 @@
 
   var setPageActive = function () {
     var mapPins = document.querySelector('.map__pins');
+    if (window.backend.load.statusLoad === 200) {
+      map.classList.remove('map--faded');
+      window.form.adForm.classList.remove('ad-form--disabled');
+      window.form.toggleInputsSelects(false);
+      window.pin.renderPins(window.data);
+      // window.updatePins();
 
-    map.classList.remove('map--faded');
-    window.form.adForm.classList.remove('ad-form--disabled');
-    window.form.toggleInputsSelects(false);
-    window.pin.renderPins();
-
-    mapPins.addEventListener('click', mapCardOpenHandler);
-    mapPinMain.removeEventListener('mousedown', mapPinMainClickHandler);
-    mapPinMain.removeEventListener('keydown', mapPinMainEnterHandler);
+      mapPins.addEventListener('click', mapCardOpenHandler);
+      mapPinMain.removeEventListener('mousedown', mapPinMainClickHandler);
+      mapPinMain.removeEventListener('keydown', mapPinMainEnterHandler);
+    }
+    if (window.backend.load.statusLoad === 404) {
+      mapPinMain.addEventListener('click', mapPinMainClickErrorHandler);
+    }
   };
 
   var setPageInactive = function () {
@@ -23,16 +28,8 @@
 
     window.form.toggleInputsSelects(true);
 
-    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    var card = document.querySelector('.map__card');
-
-    pins.forEach(function (pin) {
-      pin.remove();
-    });
-
-    if (card) {
-      card.remove();
-    }
+    window.pin.deletePins();
+    window.card.deleteCard();
 
     mapPinMain.style.left = window.main.MAP_PIN_MAIN_X + 'px';
     mapPinMain.style.top = window.main.MAP_PIN_MAIN_Y + 'px';
@@ -52,6 +49,10 @@
     addressInput.readOnly = true;
 
     window.map.addressInput = addressInput;
+  };
+
+  var mapPinMainClickErrorHandler = function () {
+    window.backend.errorHandler(window.backend.load.statusLoad + ' — ' + window.backend.load.statusTextLoad);
   };
 
   var mapPinMainClickHandler = function (evt) {
@@ -76,7 +77,7 @@
       }
 
       var mapPinId = mapPin.dataset.advId;
-      window.addCard(mapPinId);
+      window.card.addCard(mapPinId, window.filter.currentData);
       var mapCardClose = document.querySelector('.popup__close');
 
       mapCardClose.addEventListener('click', mapCardCloseHandler);
