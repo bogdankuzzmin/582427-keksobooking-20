@@ -77,6 +77,7 @@
     var card = document.querySelector('.map__card');
     if (card) {
       card.remove();
+      document.removeEventListener('keydown', window.map.mapCardCloseHandler);
     }
   };
 

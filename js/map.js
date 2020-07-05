@@ -10,7 +10,7 @@
       map.classList.remove('map--faded');
       window.form.adForm.classList.remove('ad-form--disabled');
       window.form.toggleInputsSelects(false);
-      window.pin.renderPins(window.data);
+      window.pin.renderPins(window.filter.currentData);
       // window.updatePins();
 
       mapPins.addEventListener('click', mapCardOpenHandler);
@@ -103,7 +103,8 @@
     map: map,
     mapPinMain: mapPinMain,
     setValueAddressInput: setValueAddressInput,
-    setPageInactive: setPageInactive
+    setPageInactive: setPageInactive,
+    mapCardCloseHandler: mapCardCloseHandler
   };
 
   setValueAddressInput(mapPinMain.offsetLeft + (window.main.MAP_PIN_MAIN_WIDTH / 2), (mapPinMain.offsetTop + window.main.MAP_PIN_MAIN_HEIGHT / 2));
