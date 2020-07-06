@@ -75,10 +75,15 @@
 
   var deleteCard = function () {
     var card = document.querySelector('.map__card');
+
     if (card) {
       card.remove();
-      document.removeEventListener('keydown', window.map.mapCardCloseHandler);
+      window.pin.deleteActivePinClass();
+
     }
+
+    document.removeEventListener('click', window.map.mapCardClickHandler);
+    document.removeEventListener('keydown', window.map.mapCardPresEsckHandler);
   };
 
   window.card = {
