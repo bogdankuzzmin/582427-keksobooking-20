@@ -37,13 +37,26 @@
 
   var deletePins = function () {
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
     pins.forEach(function (pin) {
       pin.remove();
     });
   };
 
+  var deleteActivePinClass = function () {
+    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    for (var i = 0; i < allPins.length; i++) {
+      if (allPins[i].classList.contains('map__pin--active')) {
+        allPins[i].classList.remove('map__pin--active');
+        break;
+      }
+    }
+  };
+
   window.pin = {
     renderPins: renderPins,
-    deletePins: deletePins
+    deletePins: deletePins,
+    deleteActivePinClass: deleteActivePinClass
   };
 })();
