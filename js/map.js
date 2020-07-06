@@ -6,16 +6,20 @@
 
   var setPageActive = function () {
     var mapPins = document.querySelector('.map__pins');
+
     if (window.backend.load.statusLoad === 200) {
       map.classList.remove('map--faded');
       window.form.adForm.classList.remove('ad-form--disabled');
       window.form.toggleInputsSelects(false);
-      window.pin.renderPins(window.filter.currentData);
+
+      window.filter.currentData = window.data;
+      window.pin.renderPins(window.data);
 
       mapPins.addEventListener('click', mapCardOpenHandler);
       mapPinMain.removeEventListener('mousedown', mapPinMainClickHandler);
       mapPinMain.removeEventListener('keydown', mapPinMainEnterHandler);
     }
+
     if (window.backend.load.statusLoad === 404) {
       mapPinMain.addEventListener('click', mapPinMainClickErrorHandler);
     }
