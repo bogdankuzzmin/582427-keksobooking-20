@@ -81,6 +81,7 @@
   var selectPrice = document.querySelector('#housing-price');
   var selectRooms = document.querySelector('#housing-rooms');
   var selectGuests = document.querySelector('#housing-guests');
+  var filterFeatures = document.querySelectorAll('.map__checkbox');
 
   var priceValue = {
     'low': {
@@ -104,6 +105,7 @@
     selectPrice: selectPrice,
     selectRooms: selectRooms,
     selectGuests: selectGuests,
+    filterFeatures: filterFeatures,
     currentData: []
   };
 })();
