@@ -108,7 +108,7 @@
     window.filter.selectPrice.value = 'any';
     window.filter.selectRooms.value = 'any';
     window.filter.selectGuests.value = 'any';
-    window.filter.mapCheckboxes.forEach(function (element) {
+    window.filter.filterFeatures.forEach(function (element) {
       element.checked = false;
     });
   };
