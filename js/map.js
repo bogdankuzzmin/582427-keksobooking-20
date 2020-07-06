@@ -11,7 +11,6 @@
       window.form.adForm.classList.remove('ad-form--disabled');
       window.form.toggleInputsSelects(false);
       window.pin.renderPins(window.filter.currentData);
-      // window.updatePins();
 
       mapPins.addEventListener('click', mapCardOpenHandler);
       mapPinMain.removeEventListener('mousedown', mapPinMainClickHandler);
@@ -69,31 +68,31 @@
 
   var mapCardOpenHandler = function (evt) {
     var mapPin = evt.target.closest('.map__pin:not(.map__pin--main)');
-    var mapCard = document.querySelector('.map__card');
 
     if (mapPin) {
-      if (mapCard) {
-        mapCard.remove();
-      }
+      window.card.deleteCard();
+      window.pin.deleteActivePinClass();
 
+      mapPin.classList.add('map__pin--active');
       var mapPinId = mapPin.dataset.advId;
       window.card.addCard(mapPinId, window.filter.currentData);
       var mapCardClose = document.querySelector('.popup__close');
 
-      mapCardClose.addEventListener('click', mapCardCloseHandler);
-      document.addEventListener('keydown', mapCardCloseHandler);
+      mapCardClose.addEventListener('click', mapCardClickHandler);
+      document.addEventListener('keydown', mapCardPresEsckHandler);
     }
   };
 
-  var mapCardCloseHandler = function (evt) {
-    var mapCard = document.querySelector('.map__card');
-
+  var mapCardClickHandler = function (evt) {
     if (evt.target.matches('.popup__close')) {
-      mapCard.remove();
-    } else if (evt.key === 'Escape') {
-      mapCard.remove();
+      window.card.deleteCard();
     }
-    document.removeEventListener('keydown', mapCardCloseHandler);
+  };
+
+  var mapCardPresEsckHandler = function () {
+    window.card.deleteCard();
+    document.removeEventListener('keydown', mapCardPresEsckHandler);
+
   };
 
   mapPinMain.addEventListener('mousedown', mapPinMainClickHandler);
@@ -104,7 +103,8 @@
     mapPinMain: mapPinMain,
     setValueAddressInput: setValueAddressInput,
     setPageInactive: setPageInactive,
-    mapCardCloseHandler: mapCardCloseHandler
+    mapCardPresEsckHandler: mapCardPresEsckHandler,
+    mapCardClickHandler: mapCardClickHandler
   };
 
   setValueAddressInput(mapPinMain.offsetLeft + (window.main.MAP_PIN_MAIN_WIDTH / 2), (mapPinMain.offsetTop + window.main.MAP_PIN_MAIN_HEIGHT / 2));
