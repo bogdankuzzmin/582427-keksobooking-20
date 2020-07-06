@@ -36,12 +36,34 @@
     inputPrice.setAttribute('placeholder', window.main.PRICES_FOR_TYPES[inputType.value]);
   };
 
-  var inputTimeInOutChangeHandler = function () {
-    if (inputTimeIn.options.selectedIndex !== inputTimeOut.options.selectedIndex) {
-      inputTimeOut.setCustomValidity('Время выезда должно совподать с временем заезда');
-    } else {
-      inputTimeOut.setCustomValidity('');
+  // var inputTimeInOutChangeHandler = function () {
+  //   if (inputTimeIn.options.selectedIndex !== inputTimeOut.options.selectedIndex) {
+  //     inputTimeOut.setCustomValidity('Время выезда должно совподать с временем заезда');
+  //   } else {
+  //     inputTimeOut.setCustomValidity('');
+  //   }
+  // };
+
+  var changeTimeSync = function (timeOne, timeTwo) {
+    switch (timeOne.value) {
+      case '12:00':
+        timeTwo.value = '12:00';
+        break;
+      case '13:00':
+        timeTwo.value = '13:00';
+        break;
+      case '14:00':
+        timeTwo.value = '14:00';
+        break;
     }
+  };
+
+  var inputTimeInChangeHandler = function () {
+    changeTimeSync(inputTimeIn, inputTimeOut);
+  };
+
+  var inputTimeOutChangeHandler = function () {
+    changeTimeSync(inputTimeOut, inputTimeIn);
   };
 
   var inputGuestsRoomsChangeHandler = function () {
@@ -105,8 +127,8 @@
     });
     inputTitle.addEventListener('input', inputTitleInputHandler);
     inputType.addEventListener('input', inputTypeChangeHandler);
-    inputTimeIn.addEventListener('input', inputTimeInOutChangeHandler);
-    inputTimeOut.addEventListener('input', inputTimeInOutChangeHandler);
+    inputTimeIn.addEventListener('input', inputTimeInChangeHandler);
+    inputTimeOut.addEventListener('input', inputTimeOutChangeHandler);
     inputGuestNumber.addEventListener('input', inputGuestsRoomsChangeHandler);
     inputRoomNumber.addEventListener('input', inputGuestsRoomsChangeHandler);
     adForm.addEventListener('submit', submitHandler);
