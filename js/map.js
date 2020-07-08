@@ -93,10 +93,10 @@
     }
   };
 
-  var mapCardPresEsckHandler = function () {
-    window.card.deleteCard();
-    document.removeEventListener('keydown', mapCardPresEsckHandler);
-
+  var mapCardPresEsckHandler = function (evt) {
+    if (evt.key === 'Escape') {
+      window.card.deleteCard();
+    }
   };
 
   mapPinMain.addEventListener('mousedown', mapPinMainClickHandler);
