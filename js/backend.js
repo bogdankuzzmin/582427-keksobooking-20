@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  // var URL_LOAD = 'js/1';
   var URL_LOAD = 'https://javascript.pages.academy/keksobooking/data';
   var URL_SAVE = 'https://javascript.pages.academy/keksobooking';
   var TIMEOUT_IN_MS = 10000;
@@ -166,8 +167,16 @@
   };
 
   var saveDataHandler = function (loadData) {
-    window.data = loadData;
-    window.filter.currentData = loadData;
+    var data = [];
+
+    loadData.forEach(function (it) {
+      if (it.offer) {
+        data.push(it);
+      }
+    });
+
+    window.data = data;
+    window.filter.currentData = data;
   };
 
   window.backend = {
