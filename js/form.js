@@ -17,6 +17,14 @@
     }
   };
 
+  var inputInvalidTitleHandler = function () {
+    inputInvalidHandler(inputTitle);
+  };
+
+  var inputInvalidPriceHandler = function () {
+    inputInvalidHandler(inputPrice);
+  };
+
   var inputTitleInputHandler = function () {
     var valueLength = inputTitle.value.length;
 
@@ -44,29 +52,16 @@
   //   }
   // };
 
-  var changeTimeSync = function (timeOne, timeTwo) {
-    switch (timeOne.value) {
-      case '12:00':
-        timeTwo.value = '12:00';
-        break;
-      case '13:00':
-        timeTwo.value = '13:00';
-        break;
-      case '14:00':
-        timeTwo.value = '14:00';
-        break;
-    }
-  };
-
   var inputTimeInChangeHandler = function () {
-    changeTimeSync(inputTimeIn, inputTimeOut);
+    inputTimeOut.value = inputTimeIn.value;
   };
 
   var inputTimeOutChangeHandler = function () {
-    changeTimeSync(inputTimeOut, inputTimeIn);
+    inputTimeIn.value = inputTimeOut.value;
+
   };
 
-  var inputGuestsRoomsChangeHandler = function () {
+  var inputGuestsRoomsChange = function () {
     if (inputGuestNumber.value === '0' && inputRoomNumber.value !== window.main.ROOMS[3]) {
       inputGuestNumber.setCustomValidity('Для ' + '"' + inputGuestNumber.options[3].label + '"' + ' допустимое значение: ' + '"' + inputRoomNumber.options[3].label + '"');
     } else if (inputRoomNumber.value === window.main.ROOMS[3] && inputGuestNumber.value !== '0') {
@@ -78,6 +73,14 @@
     }
   };
 
+  var inputRoomsChangeHandler = function () {
+    inputGuestsRoomsChange();
+  };
+
+  var inputGuestsChangeHandler = function () {
+    inputGuestsRoomsChange();
+  };
+
   var toggleInputsSelects = function (value) {
     window.main.toggleElement(adFormFieldsets, value);
     window.main.toggleElement(mapFilters, value);
@@ -85,9 +88,9 @@
   };
 
   var submitHandler = function (evt) {
-    window.backend.save(new FormData(adForm), window.backend.successHandler, window.backend.errorHandler);
-
     evt.preventDefault();
+
+    window.backend.save(new FormData(adForm), window.backend.successHandler, window.backend.errorHandler);
   };
 
   var cleanForm = function () {
@@ -118,20 +121,39 @@
     window.map.setPageInactive();
   };
 
+  var checkValidityTemplate = function (element) {
+    if (element.checkValidity() === false) {
+      element.style.border = '2px solid red';
+
+      element.addEventListener('change', function () {
+        if (element.checkValidity() === false) {
+          element.style.border = '2px solid red';
+        } else {
+          element.style.border = '1px solid #d9d9d3';
+        }
+      });
+    }
+  };
+
+  var checkValidityHandler = function () {
+    checkValidityTemplate(inputPrice);
+    checkValidityTemplate(inputTitle);
+    checkValidityTemplate(inputGuestNumber);
+    checkValidityTemplate(inputRoomNumber);
+  };
+
+
   var init = function () {
-    inputTitle.addEventListener('invalid', function () {
-      inputInvalidHandler(inputTitle);
-    });
-    inputPrice.addEventListener('invalid', function () {
-      inputInvalidHandler(inputPrice);
-    });
+    inputTitle.addEventListener('invalid', inputInvalidTitleHandler);
+    inputPrice.addEventListener('input', inputInvalidPriceHandler);
     inputTitle.addEventListener('input', inputTitleInputHandler);
     inputType.addEventListener('input', inputTypeChangeHandler);
     inputTimeIn.addEventListener('input', inputTimeInChangeHandler);
     inputTimeOut.addEventListener('input', inputTimeOutChangeHandler);
-    inputGuestNumber.addEventListener('input', inputGuestsRoomsChangeHandler);
-    inputRoomNumber.addEventListener('input', inputGuestsRoomsChangeHandler);
+    inputGuestNumber.addEventListener('input', inputGuestsChangeHandler);
+    inputRoomNumber.addEventListener('input', inputRoomsChangeHandler);
     adForm.addEventListener('submit', submitHandler);
+    adSubmit.addEventListener('click', checkValidityHandler);
     adForm.addEventListener('reset', resetHandler);
   };
 
@@ -148,9 +170,10 @@
   var inputGuestNumber = document.querySelector('#capacity');
   var inputDescription = document.querySelector('#description');
   var inputCheckboxes = document.querySelectorAll('.feature__checkbox');
+  var adSubmit = document.querySelector('.ad-form__submit');
 
   init();
-  inputGuestsRoomsChangeHandler();
+  inputGuestsRoomsChange();
   toggleInputsSelects(true);
 
   window.form = {
