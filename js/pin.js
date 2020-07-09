@@ -2,8 +2,6 @@
 
 (function () {
   var renderPins = function (dataPins) {
-    var MAX_PINS = 5;
-
     var mapPins = document.querySelector('.map__pins');
 
     var renderPin = function (adv, index) {
@@ -24,7 +22,7 @@
     };
 
     var fragment = document.createDocumentFragment();
-    var takeNumber = dataPins.length > MAX_PINS ? MAX_PINS : dataPins.length;
+    var takeNumber = dataPins.length > window.main.MAX_PINS ? window.main.MAX_PINS : dataPins.length;
 
     deletePins();
 
