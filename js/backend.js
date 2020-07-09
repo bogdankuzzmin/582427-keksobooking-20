@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  // var URL_LOAD = 'js/1';
   var URL_LOAD = 'https://javascript.pages.academy/keksobooking/data';
   var URL_SAVE = 'https://javascript.pages.academy/keksobooking';
   var TIMEOUT_IN_MS = 10000;
@@ -107,7 +106,7 @@
     var mainDOM = document.querySelector('main');
     var getTemplate = document.querySelector('#' + tagName).content;
     var getElement = getTemplate.cloneNode(true);
-    var getBtn = getElement.querySelector('.' + tagName + '__button');
+    var getButton = getElement.querySelector('.' + tagName + '__button');
     var getMessage = getElement.querySelector('.' + tagName + '__message');
 
     if (getMessage.matches('.error__message')) {
@@ -118,7 +117,7 @@
 
     var messageDiv = document.querySelector('.' + tagName);
 
-    var getBtnClickHandler = function () {
+    var ButtonClickHandler = function () {
       messageDiv.remove();
 
       document.removeEventListener('click', popupClickHandler);
@@ -153,8 +152,9 @@
 
     document.addEventListener('click', popupClickHandler);
     document.addEventListener('keydown', popupEscPressHandler);
-    if (getBtn) {
-      getBtn.addEventListener('click', getBtnClickHandler);
+
+    if (getButton) {
+      getButton.addEventListener('click', ButtonClickHandler);
     }
   };
 
