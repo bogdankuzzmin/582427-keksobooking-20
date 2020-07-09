@@ -1,46 +1,12 @@
 'use strict';
 
 (function () {
-  var getRandomElement = function (arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  };
-
-  var getRandomInteger = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-
-  var getRandomArr = function (arr) {
-    var randomArr = [];
-
-    arr.forEach(function (element) {
-      if (getRandomInteger(0, 1) === 1) {
-        randomArr.push(element);
-      }
-    });
-
-    return randomArr;
-  };
-
-  var toggleElement = function (elements, value) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].disabled = value;
-    }
-  };
-
   window.main = {
-    PIN_NUMBERS: 8,
-    // TYPE: ['palace', 'flat', 'house', 'bungalo'],
+    MAX_PINS: 5,
+
     ROOMS: ['1', '2', '3', '100'],
-    // GUESTS: ['1', '2', '3'],
-    // CHECKIN: ['12:00', '13:00', '14:00'],
-    // CHECKOUT: ['12:00', '13:00', '14:00'],
-    // FEATURES: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
-    // PHOTOS: [
-    //   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-    //   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-    //   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-    // ],
-    PRICES_FOR_TYPES: {
+
+    PRICE_FOR_TYPE: {
       bungalo: 0,
       flat: 1000,
       house: 5000,
@@ -52,6 +18,7 @@
       house: 'Дом',
       bungalo: 'Бунгало'
     },
+
     PRICE_MIN: 0,
     PRICE_MAX: 1000000,
     Y_MIN: 130,
@@ -62,11 +29,7 @@
     MAP_PIN_MAIN_HEIGHT: 65,
     MAP_PIN_MAIN_POINTER_HEIGHT: 16,
     MAP_PIN_MAIN_X: 570,
-    MAP_PIN_MAIN_Y: 375,
-    getRandomElement: getRandomElement,
-    getRandomArr: getRandomArr,
-    getRandomInteger: getRandomInteger,
-    toggleElement: toggleElement
+    MAP_PIN_MAIN_Y: 375
   };
 })();
 
