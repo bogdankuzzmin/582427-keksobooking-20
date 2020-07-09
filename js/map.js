@@ -21,7 +21,7 @@
     }
 
     if (window.backend.load.statusLoad === 404) {
-      mapPinMain.addEventListener('click', mapPinMainClickErrorHandler);
+      window.backend.errorHandler(window.backend.load.statusLoad + ' — ' + window.backend.load.statusTextLoad);
     }
   };
 
@@ -33,11 +33,11 @@
 
     window.pin.deletePins();
     window.card.deleteCard();
+    window.form.cleanForm();
 
     mapPinMain.style.left = window.main.MAP_PIN_MAIN_X + 'px';
     mapPinMain.style.top = window.main.MAP_PIN_MAIN_Y + 'px';
     setValueAddressInput(mapPinMain.offsetLeft + (window.main.MAP_PIN_MAIN_WIDTH / 2), (mapPinMain.offsetTop + window.main.MAP_PIN_MAIN_HEIGHT / 2));
-    window.form.cleanForm();
 
     mapPinMain.addEventListener('mousedown', mapPinMainClickHandler);
     mapPinMain.addEventListener('keydown', mapPinMainEnterHandler);
@@ -52,10 +52,6 @@
     addressInput.readOnly = true;
 
     window.map.addressInput = addressInput;
-  };
-
-  var mapPinMainClickErrorHandler = function () {
-    window.backend.errorHandler(window.backend.load.statusLoad + ' — ' + window.backend.load.statusTextLoad);
   };
 
   var mapPinMainClickHandler = function (evt) {
@@ -87,10 +83,8 @@
     }
   };
 
-  var mapCardClickHandler = function (evt) {
-    if (evt.target.matches('.popup__close')) {
-      window.card.deleteCard();
-    }
+  var mapCardClickHandler = function () {
+    window.card.deleteCard();
   };
 
   var mapCardPresEsckHandler = function (evt) {
