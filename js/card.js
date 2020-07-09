@@ -34,6 +34,7 @@
           cardPhotoIteam.src = adv.offer.photos[i];
           cardPhotoIteam.alt = 'фото квартиры';
           cardPhotoIteam.width = 45;
+          cardPhotoIteam.height = 40;
 
           fragment.appendChild(cardPhotoIteam);
         }
