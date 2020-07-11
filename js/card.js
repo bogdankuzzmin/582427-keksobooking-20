@@ -34,6 +34,7 @@
           cardPhotoIteam.src = adv.offer.photos[i];
           cardPhotoIteam.alt = 'фото квартиры';
           cardPhotoIteam.width = 45;
+          cardPhotoIteam.height = 40;
 
           fragment.appendChild(cardPhotoIteam);
         }
@@ -61,8 +62,14 @@
       cardRoomAndGuests.textContent = adv.offer.rooms + ' комнаты для ' + adv.offer.guests + ' гостей';
       cardCheckinAndCheckout.textContent = 'Заезд после ' + adv.offer.checkin + ', выезд до ' + adv.offer.checkout;
       cardFeatures.appendChild(renderCardFeatures(adv.offer.features, cardFeatures));
+      if (!cardFeatures.querySelector('li')) {
+        cardFeatures.remove();
+      }
       cardDescription.textContent = adv.offer.description;
       cardPhotos.appendChild(renderCardPhotos(adv.offer.photos, cardPhotos));
+      if (!cardPhotos.querySelector('img')) {
+        cardPhotos.remove();
+      }
       cardAvatar.src = adv.author.avatar;
 
       return cardElement;
@@ -75,10 +82,14 @@
 
   var deleteCard = function () {
     var card = document.querySelector('.map__card');
+
     if (card) {
       card.remove();
-      document.removeEventListener('keydown', window.map.mapCardCloseHandler);
+      window.pin.deleteActivePinClass();
     }
+
+    document.removeEventListener('click', window.map.mapCardClickHandler);
+    document.removeEventListener('keydown', window.map.mapCardPresEsckHandler);
   };
 
   window.card = {

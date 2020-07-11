@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var inputInvalidHandler = function (element) {
+  var checkPriceTitleForInvalidity = function (element) {
     if (element.validity.valueMissing) {
       element.setCustomValidity('Обязательное поле');
     } else if (element.validity.tooShort) {
@@ -15,6 +15,14 @@
     } else {
       element.setCustomValidity('');
     }
+  };
+
+  var inputInvalidTitleHandler = function () {
+    checkPriceTitleForInvalidity(inputTitle);
+  };
+
+  var inputInvalidPriceHandler = function () {
+    checkPriceTitleForInvalidity(inputPrice);
   };
 
   var inputTitleInputHandler = function () {
@@ -31,20 +39,34 @@
     }
   };
 
-  var inputTypeChangeHandler = function () {
-    inputPrice.setAttribute('min', window.main.PRICES_FOR_TYPES[inputType.value]);
-    inputPrice.setAttribute('placeholder', window.main.PRICES_FOR_TYPES[inputType.value]);
-  };
+  var inputPriceInputHandler = function () {
+    var valuePrice = Number(inputPrice.value);
 
-  var inputTimeInOutChangeHandler = function () {
-    if (inputTimeIn.options.selectedIndex !== inputTimeOut.options.selectedIndex) {
-      inputTimeOut.setCustomValidity('Время выезда должно совподать с временем заезда');
+    inputPrice.reportValidity();
+
+    if (valuePrice < inputPrice.min) {
+      inputPrice.setCustomValidity('Нужно доплатить ' + (inputPrice.min - valuePrice) + ' руб.');
+    } else if (valuePrice > inputPrice.max) {
+      inputPrice.setCustomValidity('Вы переплатили ' + (valuePrice - inputPrice.max) + ' руб.');
     } else {
-      inputTimeOut.setCustomValidity('');
+      inputPrice.setCustomValidity('');
     }
   };
 
-  var inputGuestsRoomsChangeHandler = function () {
+  var inputTypeChangeHandler = function () {
+    inputPrice.setAttribute('min', window.main.PRICE_FOR_TYPE[inputType.value]);
+    inputPrice.setAttribute('placeholder', window.main.PRICE_FOR_TYPE[inputType.value]);
+  };
+
+  var inputTimeInChangeHandler = function () {
+    inputTimeOut.value = inputTimeIn.value;
+  };
+
+  var inputTimeOutChangeHandler = function () {
+    inputTimeIn.value = inputTimeOut.value;
+  };
+
+  var checkRoomsGuestsForChanging = function () {
     if (inputGuestNumber.value === '0' && inputRoomNumber.value !== window.main.ROOMS[3]) {
       inputGuestNumber.setCustomValidity('Для ' + '"' + inputGuestNumber.options[3].label + '"' + ' допустимое значение: ' + '"' + inputRoomNumber.options[3].label + '"');
     } else if (inputRoomNumber.value === window.main.ROOMS[3] && inputGuestNumber.value !== '0') {
@@ -56,16 +78,35 @@
     }
   };
 
+  var inputRoomsChangeHandler = function () {
+    checkRoomsGuestsForChanging();
+  };
+
+  var inputGuestsChangeHandler = function () {
+    checkRoomsGuestsForChanging();
+  };
+
+  var toggleElementDisabled = function (elements, value) {
+    elements.forEach(function (it) {
+      it.disabled = value;
+    });
+  };
+
+  var toggleElementChecked = function (elements, value) {
+    elements.forEach(function (it) {
+      it.checked = value;
+    });
+  };
+
   var toggleInputsSelects = function (value) {
-    window.main.toggleElement(adFormFieldsets, value);
-    window.main.toggleElement(mapFilters, value);
-    window.main.toggleElement(mapFeatures, value);
+    toggleElementDisabled(adFormFieldsets, value);
+    toggleElementDisabled(mapFilters, value);
+    toggleElementDisabled(mapFeatures, value);
   };
 
   var submitHandler = function (evt) {
-    window.backend.save(new FormData(adForm), window.backend.successHandler, window.backend.errorHandler);
-
     evt.preventDefault();
+    window.backend.save(new FormData(adForm), window.backend.successHandler, window.backend.errorHandler);
   };
 
   var cleanForm = function () {
@@ -78,17 +119,13 @@
     inputDescription.value = '';
     inputTimeIn.value = '12:00';
     inputTimeOut.value = '12:00';
-    inputCheckboxes.forEach(function (element) {
-      element.checked = false;
-    });
+    toggleElementChecked(inputCheckboxes, false);
 
     window.filter.selectType.value = 'any';
     window.filter.selectPrice.value = 'any';
     window.filter.selectRooms.value = 'any';
     window.filter.selectGuests.value = 'any';
-    window.filter.mapCheckboxes.forEach(function (element) {
-      element.checked = false;
-    });
+    toggleElementChecked(window.filter.filterFeatures, false);
   };
 
   var resetHandler = function (evt) {
@@ -96,20 +133,35 @@
     window.map.setPageInactive();
   };
 
+  var checkValidityTemplate = function (element) {
+    if (element.checkValidity() === false) {
+      element.style.border = '2px solid red';
+
+      element.addEventListener('change', function () {
+        element.style.border = element.checkValidity() ? '1px solid #d9d9d3' : '2px solid red';
+      });
+    }
+  };
+
+  var checkValidityHandler = function () {
+    checkValidityTemplate(inputPrice);
+    checkValidityTemplate(inputTitle);
+    checkValidityTemplate(inputGuestNumber);
+  };
+
+
   var init = function () {
-    inputTitle.addEventListener('invalid', function () {
-      inputInvalidHandler(inputTitle);
-    });
-    inputPrice.addEventListener('invalid', function () {
-      inputInvalidHandler(inputPrice);
-    });
+    inputTitle.addEventListener('invalid', inputInvalidTitleHandler);
+    inputPrice.addEventListener('invalid', inputInvalidPriceHandler);
     inputTitle.addEventListener('input', inputTitleInputHandler);
+    inputPrice.addEventListener('input', inputPriceInputHandler);
     inputType.addEventListener('input', inputTypeChangeHandler);
-    inputTimeIn.addEventListener('input', inputTimeInOutChangeHandler);
-    inputTimeOut.addEventListener('input', inputTimeInOutChangeHandler);
-    inputGuestNumber.addEventListener('input', inputGuestsRoomsChangeHandler);
-    inputRoomNumber.addEventListener('input', inputGuestsRoomsChangeHandler);
+    inputTimeIn.addEventListener('change', inputTimeInChangeHandler);
+    inputTimeOut.addEventListener('change', inputTimeOutChangeHandler);
+    inputGuestNumber.addEventListener('change', inputGuestsChangeHandler);
+    inputRoomNumber.addEventListener('change', inputRoomsChangeHandler);
     adForm.addEventListener('submit', submitHandler);
+    adSubmit.addEventListener('click', checkValidityHandler);
     adForm.addEventListener('reset', resetHandler);
   };
 
@@ -126,10 +178,11 @@
   var inputGuestNumber = document.querySelector('#capacity');
   var inputDescription = document.querySelector('#description');
   var inputCheckboxes = document.querySelectorAll('.feature__checkbox');
+  var adSubmit = document.querySelector('.ad-form__submit');
 
-  init();
-  inputGuestsRoomsChangeHandler();
+  checkRoomsGuestsForChanging();
   toggleInputsSelects(true);
+  init();
 
   window.form = {
     adForm: adForm,
