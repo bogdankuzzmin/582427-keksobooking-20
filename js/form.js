@@ -138,11 +138,7 @@
       element.style.border = '2px solid red';
 
       element.addEventListener('change', function () {
-        if (element.checkValidity() === false) {
-          element.style.border = '2px solid red';
-        } else {
-          element.style.border = '1px solid #d9d9d3';
-        }
+        element.style.border = element.checkValidity() ? '1px solid #d9d9d3' : '2px solid red';
       });
     }
   };
