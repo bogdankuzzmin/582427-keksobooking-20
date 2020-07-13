@@ -48,13 +48,24 @@
   };
 
   var filtersChangeHandler = function () {
-    var filterData = window.data.filter(function (it) {
-      return filterByType(it)
-        && filterByPrice(it)
-        && fitlerByRooms(it)
-        && filterByGuests(it)
-        && filterByFeatures(it);
-    });
+    var filterData = [];
+
+    for (var i = 0; i < window.data.length; i++) {
+      var data = window.data[i];
+
+      if (filterByType(data)
+        && filterByPrice(data)
+        && fitlerByRooms(data)
+        && filterByGuests(data)
+        && filterByFeatures(data)
+      ) {
+        filterData.push(window.data[i]);
+      }
+
+      if (filterData.length === window.main.MAX_PINS) {
+        break;
+      }
+    }
 
     window.filter.currentData = filterData;
 
