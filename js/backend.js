@@ -117,7 +117,7 @@
 
     var messageDiv = document.querySelector('.' + tagName);
 
-    var ButtonClickHandler = function () {
+    var buttonClickHandler = function () {
       messageDiv.remove();
 
       document.removeEventListener('click', popupClickHandler);
@@ -154,7 +154,7 @@
     document.addEventListener('keydown', popupEscPressHandler);
 
     if (getButton) {
-      getButton.addEventListener('click', ButtonClickHandler);
+      getButton.addEventListener('click', buttonClickHandler);
     }
   };
 
