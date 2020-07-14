@@ -3,9 +3,10 @@
 (function () {
   var renderPins = function (dataPins) {
     var mapPins = document.querySelector('.map__pins');
+    var pinTemplate = document.getElementById('pin').content;
+
 
     var renderPin = function (adv, index) {
-      var pinTemplate = document.getElementById('pin').content;
       var pinElement = pinTemplate.cloneNode(true);
       var pin = pinElement.querySelector('.map__pin');
       var pinAvatar = pinElement.querySelector('img');
