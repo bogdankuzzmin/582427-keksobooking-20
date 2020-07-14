@@ -29,7 +29,7 @@
         var mapPinMainX = (mapPinMain.offsetLeft - shift.x);
 
         if (mapPinMainX + window.main.MAP_PIN_MAIN_WIDTH / 2 <= 0 ||
-            mapPinMainX + window.main.MAP_PIN_MAIN_WIDTH / 2 >= window.map.map.offsetWidth ||
+            mapPinMainX + window.main.MAP_PIN_MAIN_WIDTH / 2 >= window.map.class.offsetWidth ||
             mapPinMainY + window.main.MAP_PIN_MAIN_HEIGHT + window.main.MAP_PIN_MAIN_POINTER_HEIGHT <= window.main.Y_MIN ||
             mapPinMainY + window.main.MAP_PIN_MAIN_HEIGHT + window.main.MAP_PIN_MAIN_POINTER_HEIGHT >= window.main.Y_MAX) {
           shift.x = 0;

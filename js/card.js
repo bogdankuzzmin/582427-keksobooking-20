@@ -3,7 +3,7 @@
 (function () {
   var addCard = function (mapPinId, currentData) {
     var cardTemplate = document.getElementById('card').content;
-    var mapFilters = document.querySelector('.map__filters-container');
+    var mapFiltersContainer = document.querySelector('.map__filters-container');
 
     var renderCard = function (adv) {
       var renderCardFeatures = function (arr, block) {
@@ -77,7 +77,7 @@
 
     var fragment = document.createDocumentFragment();
     fragment.appendChild(renderCard(currentData[mapPinId]));
-    mapFilters.before(fragment);
+    mapFiltersContainer.before(fragment);
   };
 
   var deleteCard = function () {
@@ -85,15 +85,15 @@
 
     if (card) {
       card.remove();
-      window.pin.deleteActivePinClass();
+      window.pin.deleteActiveClass();
     }
 
-    document.removeEventListener('click', window.map.mapCardClickHandler);
-    document.removeEventListener('keydown', window.map.mapCardPresEsckHandler);
+    document.removeEventListener('click', window.map.cardClickHandler);
+    document.removeEventListener('keydown', window.map.cardPresEsckHandler);
   };
 
   window.card = {
-    addCard: addCard,
-    deleteCard: deleteCard
+    add: addCard,
+    delete: deleteCard
   };
 })();

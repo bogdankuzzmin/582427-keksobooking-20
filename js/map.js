@@ -9,11 +9,11 @@
 
     if (window.backend.load.statusLoad === 200) {
       map.classList.remove('map--faded');
-      window.form.adForm.classList.remove('ad-form--disabled');
+      window.form.main.classList.remove('ad-form--disabled');
       window.form.toggleInputsSelects(false);
 
       window.filter.currentData = window.data;
-      window.pin.renderPins(window.data);
+      window.pin.render(window.data);
 
       mapPins.addEventListener('click', mapCardOpenHandler);
       mapPinMain.removeEventListener('mousedown', mapPinMainClickHandler);
@@ -27,13 +27,13 @@
 
   var setPageInactive = function () {
     map.classList.add('map--faded');
-    window.form.adForm.classList.add('ad-form--disabled');
+    window.form.main.classList.add('ad-form--disabled');
 
     window.form.toggleInputsSelects(true);
 
-    window.pin.deletePins();
-    window.card.deleteCard();
-    window.form.cleanForm();
+    window.pin.delete();
+    window.card.delete();
+    window.form.clean();
 
     mapPinMain.style.left = window.main.MAP_PIN_MAIN_X + 'px';
     mapPinMain.style.top = window.main.MAP_PIN_MAIN_Y + 'px';
@@ -70,12 +70,12 @@
     var mapPin = evt.target.closest('.map__pin:not(.map__pin--main)');
 
     if (mapPin) {
-      window.card.deleteCard();
-      window.pin.deleteActivePinClass();
+      window.card.delete();
+      window.pin.deleteActiveClass();
 
       mapPin.classList.add('map__pin--active');
       var mapPinId = mapPin.dataset.advId;
-      window.card.addCard(mapPinId, window.filter.currentData);
+      window.card.add(mapPinId, window.filter.currentData);
       var mapCardClose = document.querySelector('.popup__close');
 
       mapCardClose.addEventListener('click', mapCardClickHandler);
@@ -84,12 +84,12 @@
   };
 
   var mapCardClickHandler = function () {
-    window.card.deleteCard();
+    window.card.delete();
   };
 
   var mapCardPresEsckHandler = function (evt) {
     if (evt.key === 'Escape') {
-      window.card.deleteCard();
+      window.card.delete();
     }
   };
 
@@ -97,12 +97,11 @@
   mapPinMain.addEventListener('keydown', mapPinMainEnterHandler);
 
   window.map = {
-    map: map,
-    mapPinMain: mapPinMain,
+    class: map,
     setValueAddressInput: setValueAddressInput,
     setPageInactive: setPageInactive,
-    mapCardPresEsckHandler: mapCardPresEsckHandler,
-    mapCardClickHandler: mapCardClickHandler
+    cardPresEsckHandler: mapCardPresEsckHandler,
+    cardClickHandler: mapCardClickHandler
   };
 
   setValueAddressInput(mapPinMain.offsetLeft + (window.main.MAP_PIN_MAIN_WIDTH / 2), (mapPinMain.offsetTop + window.main.MAP_PIN_MAIN_HEIGHT / 2));

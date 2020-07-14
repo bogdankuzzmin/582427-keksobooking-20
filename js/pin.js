@@ -53,8 +53,8 @@
   };
 
   window.pin = {
-    renderPins: renderPins,
-    deletePins: deletePins,
-    deleteActivePinClass: deleteActivePinClass
+    render: renderPins,
+    delete: deletePins,
+    deleteActiveClass: deleteActivePinClass
   };
 })();

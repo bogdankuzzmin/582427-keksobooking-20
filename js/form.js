@@ -125,7 +125,7 @@
     window.filter.selectPrice.value = 'any';
     window.filter.selectRooms.value = 'any';
     window.filter.selectGuests.value = 'any';
-    toggleElementChecked(window.filter.filterFeatures, false);
+    toggleElementChecked(window.filter.checkboxFeatures, false);
   };
 
   var resetHandler = function (evt) {
@@ -185,11 +185,8 @@
   init();
 
   window.form = {
-    adForm: adForm,
-    adFormFieldsets: adFormFieldsets,
-    mapFilters: mapFilters,
-    mapFeatures: mapFeatures,
+    main: adForm,
     toggleInputsSelects: toggleInputsSelects,
-    cleanForm: cleanForm
+    clean: cleanForm
   };
 })();

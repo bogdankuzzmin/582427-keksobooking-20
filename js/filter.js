@@ -73,8 +73,8 @@
   };
 
   var updatePins = window.debounce(function (data) {
-    window.card.deleteCard();
-    window.pin.renderPins(data);
+    window.card.delete();
+    window.pin.render(data);
   });
 
   var filters = document.querySelector('.map__filters');
@@ -82,7 +82,7 @@
   var selectPrice = document.querySelector('#housing-price');
   var selectRooms = document.querySelector('#housing-rooms');
   var selectGuests = document.querySelector('#housing-guests');
-  var filterFeatures = document.querySelectorAll('.map__checkbox');
+  var checkboxFeatures = document.querySelectorAll('.map__checkbox');
 
   var priceValue = {
     'low': {
@@ -106,7 +106,7 @@
     selectPrice: selectPrice,
     selectRooms: selectRooms,
     selectGuests: selectGuests,
-    filterFeatures: filterFeatures,
+    checkboxFeatures: checkboxFeatures,
     currentData: []
   };
 })();
