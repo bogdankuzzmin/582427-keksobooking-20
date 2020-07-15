@@ -7,7 +7,7 @@
   var setPageActive = function () {
     var mapPins = document.querySelector('.map__pins');
 
-    if (window.backend.load.statusLoad === 200) {
+    if (window.backend.load.statusLoad === window.backend.statusCode.OK) {
       map.classList.remove('map--faded');
       window.form.main.classList.remove('ad-form--disabled');
       window.form.toggleInputsSelects(false);
@@ -20,7 +20,7 @@
       mapPinMain.removeEventListener('keydown', mapPinMainEnterHandler);
     }
 
-    if (window.backend.load.statusLoad === 404) {
+    if (window.backend.load.statusLoad === window.backend.statusCode.NOT_FOUND) {
       window.backend.errorHandler(window.backend.load.statusLoad + ' — ' + window.backend.load.statusTextLoad);
     }
   };

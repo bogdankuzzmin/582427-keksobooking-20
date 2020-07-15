@@ -5,6 +5,14 @@
   var URL_SAVE = 'https://javascript.pages.academy/keksobooking';
   var TIMEOUT_IN_MS = 10000;
 
+  var statusCode = {
+    OK: 200,
+    BAD: 400,
+    UNAUTHOIZED: 401,
+    NOT_FOUND: 404,
+    INTERNAL_SERVER_ERROR: 500
+  };
+
   var load = function (loadHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -12,19 +20,19 @@
     xhr.addEventListener('load', function () {
       var error;
       switch (xhr.status) {
-        case 200:
+        case statusCode.OK:
           loadHandler(xhr.response);
           break;
-        case 400:
+        case statusCode.BAD:
           error = 'Неверный запрос';
           break;
-        case 401:
+        case statusCode.UNAUTHOIZED:
           error = 'Пользователь не авторизован';
           break;
-        case 404:
+        case statusCode.NOT_FOUND:
           error = '404 — Ничего не найдено';
           break;
-        case 500:
+        case statusCode.INTERNAL_SERVER_ERROR:
           error = 'Ошибка на стороне сервера';
           break;
 
@@ -63,19 +71,19 @@
     xhr.addEventListener('load', function () {
       var error;
       switch (xhr.status) {
-        case 200:
+        case statusCode.OK:
           successHandler(xhr.response);
           break;
-        case 400:
+        case statusCode.BAD:
           error = 'Неверный запрос';
           break;
-        case 401:
+        case statusCode.UNAUTHOIZED:
           error = 'Пользователь не авторизован';
           break;
-        case 404:
+        case statusCode.NOT_FOUND:
           error = 'Ничего не найдено — 404';
           break;
-        case 500:
+        case statusCode.INTERNAL_SERVER_ERROR:
           error = 'Ошибка на стороне сервера';
           break;
 
@@ -183,7 +191,8 @@
     successHandler: successHandler,
     errorHandler: errorHandler,
     save: save,
-    load: load
+    load: load,
+    statusCode: statusCode
   };
 
   load(saveDataHandler, errorHandler);
