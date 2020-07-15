@@ -6,13 +6,13 @@
 
     block.innerHTML = '';
 
-    for (var i = 0; i < arr.length; i++) {
+    arr.forEach(function (it) {
       var cardFeatureIteam = document.createElement('li');
 
-      cardFeatureIteam.classList.add('popup__feature', 'popup__feature--' + arr[i]);
+      cardFeatureIteam.classList.add('popup__feature', 'popup__feature--' + it);
 
       fragment.appendChild(cardFeatureIteam);
-    }
+    });
 
     return fragment;
   };
@@ -22,17 +22,17 @@
 
     block.innerHTML = '';
 
-    for (var i = 0; i < arr.length; i++) {
+    arr.forEach(function (it) {
       var cardPhotoIteam = document.createElement('img');
 
       cardPhotoIteam.classList.add('popup__photo');
-      cardPhotoIteam.src = arr[i];
+      cardPhotoIteam.src = it;
       cardPhotoIteam.alt = 'фото квартиры';
       cardPhotoIteam.width = 45;
       cardPhotoIteam.height = 40;
 
       fragment.appendChild(cardPhotoIteam);
-    }
+    });
 
     return fragment;
   };

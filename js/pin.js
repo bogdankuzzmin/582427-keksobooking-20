@@ -45,12 +45,12 @@
   var deleteActivePinClass = function () {
     var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
-    for (var i = 0; i < allPins.length; i++) {
-      if (allPins[i].classList.contains('map__pin--active')) {
-        allPins[i].classList.remove('map__pin--active');
-        break;
+    allPins.forEach(function (it) {
+      if (it.classList.contains('map__pin--active')) {
+        it.classList.remove('map__pin--active');
       }
-    }
+    });
+
   };
 
   window.pin = {
