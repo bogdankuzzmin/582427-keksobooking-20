@@ -13,7 +13,7 @@
     INTERNAL_SERVER_ERROR: 500
   };
 
-  var load = function (loadHandler, errorHandler) {
+  var xhrTemplate = function (method, data, URL, successHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -21,7 +21,7 @@
       var error;
       switch (xhr.status) {
         case statusCode.OK:
-          loadHandler(xhr.response);
+          successHandler(xhr.response);
           break;
         case statusCode.BAD:
           error = 'Неверный запрос';
@@ -60,53 +60,7 @@
 
     xhr.timeout = TIMEOUT_IN_MS;
 
-    xhr.open('GET', URL_LOAD);
-    xhr.send();
-  };
-
-  var save = function (data, successHandler, errorHandler) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      var error;
-      switch (xhr.status) {
-        case statusCode.OK:
-          successHandler(xhr.response);
-          break;
-        case statusCode.BAD:
-          error = 'Неверный запрос';
-          break;
-        case statusCode.UNAUTHOIZED:
-          error = 'Пользователь не авторизован';
-          break;
-        case statusCode.NOT_FOUND:
-          error = 'Ничего не найдено — 404';
-          break;
-        case statusCode.INTERNAL_SERVER_ERROR:
-          error = 'Ошибка на стороне сервера';
-          break;
-
-        default:
-          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
-      }
-
-      if (error) {
-        errorHandler(error);
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      errorHandler('Произошла ошибка соединения');
-    });
-
-    xhr.addEventListener('timeout', function () {
-      errorHandler('Запрос не успел выполнится за ' + xhr.timeout + 'мс');
-    });
-
-    xhr.timeout = TIMEOUT_IN_MS;
-
-    xhr.open('POST', URL_SAVE);
+    xhr.open(method, URL);
     xhr.send(data);
   };
 
@@ -190,11 +144,10 @@
   window.backend = {
     successHandler: successHandler,
     errorHandler: errorHandler,
-    save: save,
-    load: load,
+    xhrTemplate: xhrTemplate,
+    URL_SAVE: URL_SAVE,
     statusCode: statusCode
   };
 
-  load(saveDataHandler, errorHandler);
+  xhrTemplate('GET', null, URL_LOAD, saveDataHandler, errorHandler);
 })();
-

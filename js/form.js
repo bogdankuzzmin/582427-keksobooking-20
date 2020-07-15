@@ -106,7 +106,7 @@
 
   var submitHandler = function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(adForm), window.backend.successHandler, window.backend.errorHandler);
+    window.backend.xhrTemplate('POST', new FormData(adForm), window.backend.URL_SAVE, window.backend.successHandler, window.backend.errorHandler);
   };
 
   var cleanForm = function () {
