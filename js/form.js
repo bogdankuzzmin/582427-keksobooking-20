@@ -126,6 +126,9 @@
     window.filter.selectRooms.value = 'any';
     window.filter.selectGuests.value = 'any';
     toggleElementChecked(window.filter.checkboxFeatures, false);
+
+    window.avatar.preview.src = 'img/muffin-grey.svg';
+    window.avatar.photoPreview.style.backgroundImage = 'none';
   };
 
   var resetHandler = function (evt) {
