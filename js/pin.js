@@ -27,9 +27,9 @@
 
     deletePins();
 
-    for (var i = 0; i < takeNumber; i++) {
-      fragment.appendChild(renderPin(dataPins[i], i));
-    }
+    dataPins.slice(0, takeNumber).forEach(function (it, i) {
+      fragment.appendChild(renderPin(it, i));
+    });
 
     mapPins.appendChild(fragment);
   };
