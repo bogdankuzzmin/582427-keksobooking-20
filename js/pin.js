@@ -50,7 +50,6 @@
         it.classList.remove('map__pin--active');
       }
     });
-
   };
 
   window.pin = {
