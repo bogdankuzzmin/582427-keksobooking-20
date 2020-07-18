@@ -3,9 +3,10 @@
 (function () {
   var renderPins = function (dataPins) {
     var mapPins = document.querySelector('.map__pins');
+    var pinTemplate = document.getElementById('pin').content;
+
 
     var renderPin = function (adv, index) {
-      var pinTemplate = document.getElementById('pin').content;
       var pinElement = pinTemplate.cloneNode(true);
       var pin = pinElement.querySelector('.map__pin');
       var pinAvatar = pinElement.querySelector('img');
@@ -26,9 +27,9 @@
 
     deletePins();
 
-    for (var i = 0; i < takeNumber; i++) {
-      fragment.appendChild(renderPin(dataPins[i], i));
-    }
+    dataPins.slice(0, takeNumber).forEach(function (it, i) {
+      fragment.appendChild(renderPin(it, i));
+    });
 
     mapPins.appendChild(fragment);
   };
@@ -44,17 +45,16 @@
   var deleteActivePinClass = function () {
     var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
-    for (var i = 0; i < allPins.length; i++) {
-      if (allPins[i].classList.contains('map__pin--active')) {
-        allPins[i].classList.remove('map__pin--active');
-        break;
+    allPins.forEach(function (it) {
+      if (it.classList.contains('map__pin--active')) {
+        it.classList.remove('map__pin--active');
       }
-    }
+    });
   };
 
   window.pin = {
-    renderPins: renderPins,
-    deletePins: deletePins,
-    deleteActivePinClass: deleteActivePinClass
+    render: renderPins,
+    delete: deletePins,
+    deleteActiveClass: deleteActivePinClass
   };
 })();

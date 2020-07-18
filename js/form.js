@@ -106,7 +106,7 @@
 
   var submitHandler = function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(adForm), window.backend.successHandler, window.backend.errorHandler);
+    window.backend.xhrTemplate('POST', new FormData(adForm), window.backend.URL_SAVE, window.backend.successHandler, window.backend.errorHandler);
   };
 
   var cleanForm = function () {
@@ -125,7 +125,10 @@
     window.filter.selectPrice.value = 'any';
     window.filter.selectRooms.value = 'any';
     window.filter.selectGuests.value = 'any';
-    toggleElementChecked(window.filter.filterFeatures, false);
+    toggleElementChecked(window.filter.checkboxFeatures, false);
+
+    window.avatar.preview.src = 'img/muffin-grey.svg';
+    window.avatar.photoPreview.style.backgroundImage = 'none';
   };
 
   var resetHandler = function (evt) {
@@ -185,11 +188,8 @@
   init();
 
   window.form = {
-    adForm: adForm,
-    adFormFieldsets: adFormFieldsets,
-    mapFilters: mapFilters,
-    mapFeatures: mapFeatures,
+    main: adForm,
     toggleInputsSelects: toggleInputsSelects,
-    cleanForm: cleanForm
+    clean: cleanForm
   };
 })();

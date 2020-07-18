@@ -48,13 +48,24 @@
   };
 
   var filtersChangeHandler = function () {
-    var filterData = window.data.filter(function (it) {
-      return filterByType(it)
-        && filterByPrice(it)
-        && fitlerByRooms(it)
-        && filterByGuests(it)
-        && filterByFeatures(it);
-    });
+    var filterData = [];
+
+    for (var i = 0; i < window.data.length; i++) {
+      var data = window.data[i];
+
+      if (filterByType(data)
+        && filterByPrice(data)
+        && fitlerByRooms(data)
+        && filterByGuests(data)
+        && filterByFeatures(data)
+      ) {
+        filterData.push(window.data[i]);
+      }
+
+      if (filterData.length === window.main.MAX_PINS) {
+        break;
+      }
+    }
 
     window.filter.currentData = filterData;
 
@@ -62,8 +73,8 @@
   };
 
   var updatePins = window.debounce(function (data) {
-    window.card.deleteCard();
-    window.pin.renderPins(data);
+    window.card.delete();
+    window.pin.render(data);
   });
 
   var filters = document.querySelector('.map__filters');
@@ -71,7 +82,7 @@
   var selectPrice = document.querySelector('#housing-price');
   var selectRooms = document.querySelector('#housing-rooms');
   var selectGuests = document.querySelector('#housing-guests');
-  var filterFeatures = document.querySelectorAll('.map__checkbox');
+  var checkboxFeatures = document.querySelectorAll('.map__checkbox');
 
   var priceValue = {
     'low': {
@@ -95,7 +106,7 @@
     selectPrice: selectPrice,
     selectRooms: selectRooms,
     selectGuests: selectGuests,
-    filterFeatures: filterFeatures,
+    checkboxFeatures: checkboxFeatures,
     currentData: []
   };
 })();

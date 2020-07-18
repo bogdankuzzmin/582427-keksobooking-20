@@ -5,26 +5,34 @@
   var URL_SAVE = 'https://javascript.pages.academy/keksobooking';
   var TIMEOUT_IN_MS = 10000;
 
-  var load = function (loadHandler, errorHandler) {
+  var statusCode = {
+    OK: 200,
+    BAD: 400,
+    UNAUTHOIZED: 401,
+    NOT_FOUND: 404,
+    INTERNAL_SERVER_ERROR: 500
+  };
+
+  var xhrTemplate = function (method, data, URL, successHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
       var error;
       switch (xhr.status) {
-        case 200:
-          loadHandler(xhr.response);
+        case statusCode.OK:
+          successHandler(xhr.response);
           break;
-        case 400:
+        case statusCode.BAD:
           error = 'Неверный запрос';
           break;
-        case 401:
+        case statusCode.UNAUTHOIZED:
           error = 'Пользователь не авторизован';
           break;
-        case 404:
+        case statusCode.NOT_FOUND:
           error = '404 — Ничего не найдено';
           break;
-        case 500:
+        case statusCode.INTERNAL_SERVER_ERROR:
           error = 'Ошибка на стороне сервера';
           break;
 
@@ -52,53 +60,7 @@
 
     xhr.timeout = TIMEOUT_IN_MS;
 
-    xhr.open('GET', URL_LOAD);
-    xhr.send();
-  };
-
-  var save = function (data, successHandler, errorHandler) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      var error;
-      switch (xhr.status) {
-        case 200:
-          successHandler(xhr.response);
-          break;
-        case 400:
-          error = 'Неверный запрос';
-          break;
-        case 401:
-          error = 'Пользователь не авторизован';
-          break;
-        case 404:
-          error = 'Ничего не найдено — 404';
-          break;
-        case 500:
-          error = 'Ошибка на стороне сервера';
-          break;
-
-        default:
-          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
-      }
-
-      if (error) {
-        errorHandler(error);
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      errorHandler('Произошла ошибка соединения');
-    });
-
-    xhr.addEventListener('timeout', function () {
-      errorHandler('Запрос не успел выполнится за ' + xhr.timeout + 'мс');
-    });
-
-    xhr.timeout = TIMEOUT_IN_MS;
-
-    xhr.open('POST', URL_SAVE);
+    xhr.open(method, URL);
     xhr.send(data);
   };
 
@@ -117,7 +79,7 @@
 
     var messageDiv = document.querySelector('.' + tagName);
 
-    var ButtonClickHandler = function () {
+    var buttonClickHandler = function () {
       messageDiv.remove();
 
       document.removeEventListener('click', popupClickHandler);
@@ -154,7 +116,7 @@
     document.addEventListener('keydown', popupEscPressHandler);
 
     if (getButton) {
-      getButton.addEventListener('click', ButtonClickHandler);
+      getButton.addEventListener('click', buttonClickHandler);
     }
   };
 
@@ -182,10 +144,10 @@
   window.backend = {
     successHandler: successHandler,
     errorHandler: errorHandler,
-    save: save,
-    load: load
+    xhrTemplate: xhrTemplate,
+    URL_SAVE: URL_SAVE,
+    statusCode: statusCode
   };
 
-  load(saveDataHandler, errorHandler);
+  xhrTemplate('GET', null, URL_LOAD, saveDataHandler, errorHandler);
 })();
-
