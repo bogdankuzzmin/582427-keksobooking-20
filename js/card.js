@@ -6,13 +6,15 @@
 
     block.innerHTML = '';
 
-    arr.forEach(function (it) {
-      var cardFeatureIteam = document.createElement('li');
+    if (arr) {
+      arr.forEach(function (it) {
+        var cardFeatureIteam = document.createElement('li');
 
-      cardFeatureIteam.classList.add('popup__feature', 'popup__feature--' + it);
+        cardFeatureIteam.classList.add('popup__feature', 'popup__feature--' + it);
 
-      fragment.appendChild(cardFeatureIteam);
-    });
+        fragment.appendChild(cardFeatureIteam);
+      });
+    }
 
     return fragment;
   };
