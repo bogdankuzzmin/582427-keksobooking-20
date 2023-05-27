@@ -24,17 +24,19 @@
 
     block.innerHTML = '';
 
-    arr.forEach(function (it) {
-      var cardPhotoIteam = document.createElement('img');
+    if (arr) {
+      arr.forEach(function (it) {
+        var cardPhotoIteam = document.createElement('img');
 
-      cardPhotoIteam.classList.add('popup__photo');
-      cardPhotoIteam.src = it;
-      cardPhotoIteam.alt = 'фото квартиры';
-      cardPhotoIteam.width = 45;
-      cardPhotoIteam.height = 40;
+        cardPhotoIteam.classList.add('popup__photo');
+        cardPhotoIteam.src = it;
+        cardPhotoIteam.alt = 'фото квартиры';
+        cardPhotoIteam.width = 45;
+        cardPhotoIteam.height = 40;
 
-      fragment.appendChild(cardPhotoIteam);
-    });
+        fragment.appendChild(cardPhotoIteam);
+      });
+    }
 
     return fragment;
   };
