@@ -40,8 +40,9 @@
 
   var filterByFeatures = function (it) {
     var selectFeatures = Array.from(filters.querySelectorAll('input:checked'));
+
     return selectFeatures.every(function (item) {
-      return it.offer.features.some(function (feature) {
+      return it.offer.features && it.offer.features.some(function (feature) {
         return feature === item.value;
       });
     });
