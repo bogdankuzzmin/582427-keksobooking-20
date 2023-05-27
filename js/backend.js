@@ -4,7 +4,7 @@
   // Apis from html academy, the URL changes when starts a new course.
   // var URL_LOAD = 'https://27.javascript.pages.academy/keksobooking/data';
 
-  var URL_LOAD = 'https://keksobooking-c7b9e-default-rtdb.firebaseio.com/data.json';
+  var URL_LOAD = 'https://keksobooking-e1878-default-rtdb.firebaseio.com/data.json';
   var URL_SAVE = 'https://27.javascript.pages.academy/keksobooking'; // TODO: change on firebase
   var TIMEOUT_IN_MS = 10000;
 
