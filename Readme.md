@@ -2,7 +2,6 @@
 
 * Student: [Bogdan Kuzmin](https://up.htmlacademy.ru/javascript/20/user/582427).
 * Mentor: [Михаил Семиколенов](https://htmlacademy.ru/profile/id19706).
-* Demo: [Keksobooking](http://bogdankuzmin.com/projects/keksobooking/).
 
 ---
 
